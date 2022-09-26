@@ -3,7 +3,7 @@
 printf "Starting the update process..."
 sleep 1
 #Getting the actual date and setting the name of the log file.
-_now=$(date +"%Y-%m-%d") 
+_now=$(date +"%Y-%m-%dT%H:%M:%S") 
 echo "Actual date:  " "$_now"
 sudo mkdir /home/pi/githubRepository
 # Moving into the directory to make the upatade.
