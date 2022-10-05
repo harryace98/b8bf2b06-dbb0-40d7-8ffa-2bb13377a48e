@@ -12,7 +12,7 @@ sudo mv config.json config.json.bk
 printf "Downloading the current version of the configuration file..."
 curl https://raw.githubusercontent.com/harryace98/b8bf2b06-dbb0-40d7-8ffa-2bb13377a48e/main/config.json > config.json
 # Giving the correct file permission 
-sudo chown pi:pi /home/pi/com.proalnet.iot-0.0.1-jar-with-dependencies.jar
+sudo chown pi:pi /home/pi/gespline-api/wwwroot/data/config.json
 # Kill the java process for reset the app.
 printf "Killing the actual IoT Capture Process... "
 sudo killall java 

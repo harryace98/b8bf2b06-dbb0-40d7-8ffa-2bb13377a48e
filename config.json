@@ -1,56 +1,60 @@
 {
-    "brokerServer": {
+    "BrokerServer": {
         "value": "a39g730csmjomc-ats.iot.us-east-1.amazonaws.com",
         "description": "Adress to mqtt broker."
     },
-    "rootTopic": {
-        "value": "proalnet/device491",
+    "RootTopic": {
+        "value": "Proalnet/testMachine",
         "description": "Topic where all machine things happends."
     },
-    "deviceId": {
-        "value": "Proalnet:GioTest01",
+    "DeviceId": {
+        "value": "testMachine",
         "description": "Unique id to identify this machine."
     },
     "storageDirectory": {
-        "value": "./LocalStorage/",
+        "value": "LocalStorage/",
         "description": "Direcotry where mqtt client execute Persistence of the last message."
     },
     "sensors": [
         {
-            "timeEnterStop": "1",
-            "timeOutStop": "1",
-            "samplingPeriod": "12",
-            "typeEntry": "0",
+            "timeEnterStop": "60",
+            "timeOutStop": "30",
+            "samplingPeriod": "1",
+            "typeEntry": "1",
             "oneShotTime": "1",
             "name": "sensor1",
-            "multiplierFactorSensor": "132"
+            "multiplierFactorSensor": "1",
+            "pulsesToDetectRunning": "2"
         },
         {
-            "timeEnterStop": "1",
-            "timeOutStop": "1",
-            "samplingPeriod": "1232",
+            "timeEnterStop": "30",
+            "timeOutStop": "30",
+            "samplingPeriod": "1",
             "typeEntry": "1",
             "oneShotTime": "1",
             "name": "sensor2",
-            "multiplierFactorSensor": "25"
+            "multiplierFactorSensor": "1",
+            "pulsesToDetectRunning": "2"
         },
         {
-            "timeEnterStop": "1",
-            "timeOutStop": "1",
+            "timeEnterStop": "30",
+            "timeOutStop": "30",
             "samplingPeriod": "1",
             "typeEntry": "1",
             "oneShotTime": "1",
             "name": "sensor3",
-            "multiplierFactorSensor": "1"
+            "multiplierFactorSensor": "1",
+            "pulsesToDetectRunning": "2"
         },
         {
-            "timeEnterStop": "1",
-            "timeOutStop": "1",
-            "samplingPeriod": "120",
+            "timeEnterStop": "30",
+            "timeOutStop": "30",
+            "samplingPeriod": "1",
             "typeEntry": "1",
             "oneShotTime": "1",
             "name": "sensor4",
-            "multiplierFactorSensor": "1"
+            "multiplierFactorSensor": "1",
+            "pulsesToDetectRunning": "2"
         }
     ],
     "networks": [
@@ -64,7 +68,7 @@
         }
     ],
     "cellularProvider": {
-        "name": "",
+        "name": "movistar",
         "apn": ""
     },
     "watchDog": {
