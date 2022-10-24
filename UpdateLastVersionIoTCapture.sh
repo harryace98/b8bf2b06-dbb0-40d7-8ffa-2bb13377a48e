@@ -4,9 +4,9 @@ sleep 1
 #Getting the actual date and setting the name of the log file.
 _now=$(date +"%Y-%m-%dT%H:%M:%S")
 echo "Actual date:  " "$_now"
-sudo mkdir /home/pi/githubRepository
+sudo mkdir /home/pi/Configurations/githubRepository
 # Moving into the directory to make the upatade.
-cd /home/pi/githubRepository/
+cd /home/pi/Configurations/githubRepository
 # Getting the most recent version of teh Iot capture code.
 sudo wget https://github.com/harryace98/b8bf2b06-dbb0-40d7-8ffa-2bb13377a48e/raw/main/com.proalnet.iot-0.0.1-jar-with-dependencies.jar -O com.proalnet.iot-0.0.1-jar-with-dependencies.jar
 # Saving the previus version in a backUp
