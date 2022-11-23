@@ -1,20 +1,26 @@
 #!/bin/bash
 # System Update
+echo "Updating the system..."
 sudo apt-get update
 sudo apt-get upgrade -y
 
 # Enable the ethernet module
- echo "dtoverlay=enc28j60" >> sudo nano /boot/config.txt
+ echo "Enable the ethernet module..."
+ echo "dtoverlay=enc28j60" >> /boot/config.txt
 
- # Install modules .
+ # Install modules
+ echo "Installing the needed modules..."
  sudo apt-get install hostapd dnsmasq -y
  sudo apt-get install default-jdk -y
  sudo apt-get install python -y
  sudo apt-get install python3 -y
+ sudo apt-get install python3-pip python3-dev python3-rpi.gpio python3-smbus -y
+ sudo apt-get install i2c-tools -y
 
  #------------AP Mode-------------------
 
  # Creating the backups.
+ echo "Creating the directories and files..."
  sudo mkdir /home/pi/Configurations
  sudo mkdir /home/pi/Configurations/AP
 
@@ -34,18 +40,18 @@ sudo apt-get upgrade -y
  sudo chown pi LocalStorage -R
 
  # Configure dhcpcd
- sudo echo "
+ sudo echo '
  interface wlan0
 static ip_address=192.168.4.1/24
-nohook wpa_supplicant" >> /home/pi/Configurations/AP/dhcpcd.conf
+nohook wpa_supplicant' >> /home/pi/Configurations/AP/dhcpcd.conf
 
 # Configure dnsmasq
-sudo echo "
+sudo echo '
 interface=wlan0
-dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h" > /home/pi/Configurations/AP/dnsmasq.conf
+dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h' > /home/pi/Configurations/AP/dnsmasq.conf
 
 # Configure hostapd.conf
-sudo echo "
+sudo echo '
 interface=wlan0
 driver=nl80211
 ssid=raspberry IoT
@@ -59,10 +65,10 @@ wpa=2
 wpa_passphrase=raspberry1234
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
-rsn_pairwise=CCMP" > /etc/hostapd/hostapd.config
+rsn_pairwise=CCMP' > /etc/hostapd/hostapd.config
 
 # Configure hostapd
-sudo echo "
+sudo echo '
 # Defaults for hostapd initscript
 #
 # See /usr/share/doc/hostapd/README.Debian for information about alternative
@@ -82,9 +88,9 @@ DAEMON_CONF="/etc/hostapd/hostapd.conf"
 # Note that -B (daemon mode) and -P (pidfile) options are automatically
 # configured by the init.d script and must not be added to DAEMON_OPTS.
 #
-#DAEMON_OPTS=""" > /home/pi/Configurations/AP/hostapd
+#DAEMON_OPTS=""' > /home/pi/Configurations/AP/hostapd
 
-sudo echo "
+sudo echo '
 #!/usr/bin/env python
 import RPi.GPIO as GPIO
 import time
@@ -140,9 +146,9 @@ time.sleep(0.2)
 GPIO.output(19,0)
 time.sleep(0.2)
 GPIO.output(13,0)
-time.sleep(0.2)" > /home/pi/Configurations/ledini.py
+time.sleep(0.2)' > /home/pi/Configurations/ledini.py
 
-sudo echo "
+sudo echo '
 #!/bin/bash
 sudo cp /home/pi/Configurations/AP/dhcpcd.conf.orig /etc/dhcpcd.conf
 sudo cp /home/pi/Configurations/AP/dnsmasq.conf.orig /etc/dnsmasq.conf
@@ -156,9 +162,9 @@ sudo echo Y > /sys/class/net/wwan0/qmi/raw_ip
 sudo ip link set dev wwan0 up
 sudo qmicli --device=/dev/cdc-wdm0 --device-open-proxy --wds-start-network="ip-type=4,apn=<YOUR_APN>" --client-no-release-cid
 sudo udhcpc -q -f -n -i wwan0
-exit" > /home/pi/Configurations/normal.sh
+exit' > /home/pi/Configurations/normal.sh
 
-sudo echo "
+sudo echo '
 #!/bin/bash
 sudo cp /home/pi/Configurations/AP/dhcpcd.conf /etc/dhcpcd.conf
 sudo cp /home/pi/Configurations/AP/dnsmasq.conf /etc/dnsmasq.conf
@@ -175,7 +181,7 @@ sudo echo Y > /sys/class/net/wwan0/qmi/raw_ip
 sudo ip link set dev wwan0 up
 sudo qmicli --device=/dev/cdc-wdm0 --device-open-proxy --wds-start-network="ip-type=4,apn=<YOUR_APN>" --client-no-release-cid
 sudo udhcpc -q -f -n -i wwan0
-exit" > /home/pi/Configurations/AP.sh
+exit' > /home/pi/Configurations/AP.sh
 
 sudo echo '
 #!/usr/bin/env python
@@ -230,19 +236,23 @@ if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
-sudo python /home/pi/Configurations/ledini.py&
+# init the RTC
+echo ds1307 0x68 > /sys/class/i2c-adapter/i2c-1/new_device
+
+sudo python3 /home/pi/Configurations/ledini.py &
 
 sleep 10
 
-sudo python /home/pi/Configurations/APmode.py&
+sudo python3 /home/pi/Configurations/APmode.py &
 
 sleep 30
 cd /home/pi
-sudo bash reboot.sh&
+sudo bash reboot.sh &
 
 exit 0' > /etc/rc.local
 
  #------------ Capture Application configuration -------------------
+ echo "Updating and configurate de environment..."
  # Create directorty to save the app updates.
  sudo mkdir /home/pi/Configurations/githubRepository
  # Download the files for update the app.
