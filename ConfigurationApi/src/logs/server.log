@@ -1,0 +1,151 @@
+2022-12-13 14:42:28,662-4064-root-INFO-38-FlaskServer started
+2022-12-13 14:42:28,663-4064-root-INFO-61-Running FlaskServer
+2022-12-13 14:42:28,663-4064-root-INFO-73-Running MyApp
+2022-12-13 14:42:28,672-4064-werkzeug-INFO-224-[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8081
+ * Running on http://192.168.1.62:8081
+2022-12-13 14:42:28,673-4064-werkzeug-INFO-224-[33mPress CTRL+C to quit[0m
+2022-12-13 14:42:28,674-4064-werkzeug-INFO-224- * Restarting with stat
+2022-12-13 14:42:28,845-16696-root-INFO-38-FlaskServer started
+2022-12-13 14:42:28,847-16696-root-INFO-61-Running FlaskServer
+2022-12-13 14:42:28,847-16696-root-INFO-73-Running MyApp
+2022-12-13 14:42:28,853-16696-werkzeug-WARNING-224- * Debugger is active!
+2022-12-13 14:42:28,857-16696-werkzeug-INFO-224- * Debugger PIN: 119-710-655
+2022-12-13 14:44:30,635-16696-werkzeug-INFO-224- * Detected change in 'I:\\henry\\Desktop\\Henry\\PROALNET\\Desarrollo\\IoT\\APIs\\gio API\\test\\src\\main.py', reloading
+2022-12-13 14:44:30,650-4064-werkzeug-INFO-224- * Restarting with stat
+2022-12-13 14:44:30,826-8424-root-INFO-38-FlaskServer started
+2022-12-13 14:44:30,827-8424-root-ERROR-65-View function mapping is overwriting an existing endpoint function: userapi
+2022-12-13 14:44:30,829-8424-root-ERROR-66-Traceback (most recent call last):
+  File "I:\henry\Desktop\Henry\PROALNET\Desarrollo\IoT\APIs\gio API\test\src\main.py", line 56, in start_app
+    api.add_resource(UserAPI, '/user/profile/',resource_class_kwargs=resource_class_kwargs)
+  File "C:\Users\Henry\AppData\Local\Programs\Python\Python39\lib\site-packages\flask_restful\__init__.py", line 391, in add_resource
+    self._register_view(self.app, resource, *urls, **kwargs)
+  File "C:\Users\Henry\AppData\Local\Programs\Python\Python39\lib\site-packages\flask_restful\__init__.py", line 457, in _register_view
+    app.add_url_rule(rule, view_func=resource_func, **kwargs)
+  File "C:\Users\Henry\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\scaffold.py", line 50, in wrapper_func
+    return f(self, *args, **kwargs)
+  File "C:\Users\Henry\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 1358, in add_url_rule
+    raise AssertionError(
+AssertionError: View function mapping is overwriting an existing endpoint function: userapi
+
+2022-12-13 14:44:30,829-8424-root-ERROR-67-Unable to start FlaskServer
+2022-12-13 14:44:30,829-8424-root-ERROR-77-Error starting MyApp
+2022-12-13 14:45:05,873-20696-root-INFO-39-FlaskServer started
+2022-12-13 14:45:05,874-20696-root-ERROR-66-View function mapping is overwriting an existing endpoint function: userapi
+2022-12-13 14:45:05,875-20696-root-ERROR-67-Traceback (most recent call last):
+  File "I:\henry\Desktop\Henry\PROALNET\Desarrollo\IoT\APIs\gio API\test\src\main.py", line 57, in start_app
+    api.add_resource(UserAPI, '/user/profile/',resource_class_kwargs=resource_class_kwargs)
+  File "C:\Users\Henry\AppData\Local\Programs\Python\Python39\lib\site-packages\flask_restful\__init__.py", line 391, in add_resource
+    self._register_view(self.app, resource, *urls, **kwargs)
+  File "C:\Users\Henry\AppData\Local\Programs\Python\Python39\lib\site-packages\flask_restful\__init__.py", line 457, in _register_view
+    app.add_url_rule(rule, view_func=resource_func, **kwargs)
+  File "C:\Users\Henry\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\scaffold.py", line 50, in wrapper_func
+    return f(self, *args, **kwargs)
+  File "C:\Users\Henry\AppData\Local\Programs\Python\Python39\lib\site-packages\flask\app.py", line 1358, in add_url_rule
+    raise AssertionError(
+AssertionError: View function mapping is overwriting an existing endpoint function: userapi
+
+2022-12-13 14:45:05,876-20696-root-ERROR-68-Unable to start FlaskServer
+2022-12-13 14:45:05,876-20696-root-ERROR-78-Error starting MyApp
+2022-12-13 14:45:31,558-18240-root-INFO-39-FlaskServer started
+2022-12-13 14:45:31,560-18240-root-INFO-63-Running FlaskServer
+2022-12-13 14:45:31,560-18240-root-INFO-75-Running MyApp
+2022-12-13 14:45:31,569-18240-werkzeug-INFO-224-[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8081
+ * Running on http://192.168.1.62:8081
+2022-12-13 14:45:31,570-18240-werkzeug-INFO-224-[33mPress CTRL+C to quit[0m
+2022-12-13 14:45:31,571-18240-werkzeug-INFO-224- * Restarting with stat
+2022-12-13 14:45:31,747-7868-root-INFO-39-FlaskServer started
+2022-12-13 14:45:31,749-7868-root-INFO-63-Running FlaskServer
+2022-12-13 14:45:31,749-7868-root-INFO-75-Running MyApp
+2022-12-13 14:45:31,754-7868-werkzeug-WARNING-224- * Debugger is active!
+2022-12-13 14:45:31,758-7868-werkzeug-INFO-224- * Debugger PIN: 119-710-655
+2022-12-13 14:46:20,960-7868-apiserver.network-ERROR-35-[Errno 2] No such file or directory: '../../../etc/wpa_supplicant/wpa_supplicant.conf'
+2022-12-13 14:46:20,960-7868-apiserver.network-ERROR-36-<class 'FileNotFoundError'>
+2022-12-13 14:46:20,961-7868-apiserver.network-ERROR-37-Traceback (most recent call last):
+  File "I:\henry\Desktop\Henry\PROALNET\Desarrollo\IoT\APIs\gio API\test\src\apiserver\network.py", line 23, in get
+    wifiFile = open(fileName, "r")
+FileNotFoundError: [Errno 2] No such file or directory: '../../../etc/wpa_supplicant/wpa_supplicant.conf'
+
+2022-12-13 14:46:20,962-7868-werkzeug-INFO-224-127.0.0.1 - - [13/Dec/2022 14:46:20] "[35m[1mGET /network HTTP/1.1[0m" 500 -
+2022-12-13 14:46:56,345-7868-werkzeug-INFO-224- * Detected change in 'I:\\henry\\Desktop\\Henry\\PROALNET\\Desarrollo\\IoT\\APIs\\gio API\\test\\src\\apiserver\\network.py', reloading
+2022-12-13 14:46:56,361-18240-werkzeug-INFO-224- * Restarting with stat
+2022-12-13 14:47:33,247-11884-root-INFO-39-FlaskServer started
+2022-12-13 14:47:33,249-11884-root-INFO-63-Running FlaskServer
+2022-12-13 14:47:33,249-11884-root-INFO-75-Running MyApp
+2022-12-13 14:47:33,258-11884-werkzeug-INFO-224-[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8081
+ * Running on http://192.168.1.62:8081
+2022-12-13 14:47:33,258-11884-werkzeug-INFO-224-[33mPress CTRL+C to quit[0m
+2022-12-13 14:47:33,259-11884-werkzeug-INFO-224- * Restarting with stat
+2022-12-13 14:47:33,432-32-root-INFO-39-FlaskServer started
+2022-12-13 14:47:33,433-32-root-INFO-63-Running FlaskServer
+2022-12-13 14:47:33,433-32-root-INFO-75-Running MyApp
+2022-12-13 14:47:33,438-32-werkzeug-WARNING-224- * Debugger is active!
+2022-12-13 14:47:33,442-32-werkzeug-INFO-224- * Debugger PIN: 119-710-655
+2022-12-13 14:47:38,296-32-apiserver.network-ERROR-35-[Errno 2] No such file or directory: '../../../etc/wpa_supplicant/wpa_supplicant.conf'
+2022-12-13 14:47:38,297-32-apiserver.network-ERROR-36-<class 'FileNotFoundError'>
+2022-12-13 14:47:38,305-32-apiserver.network-ERROR-37-Traceback (most recent call last):
+  File "I:\henry\Desktop\Henry\PROALNET\Desarrollo\IoT\APIs\gio API\test\src\apiserver\network.py", line 23, in get
+    wifiFile = open(fileName, "r")
+FileNotFoundError: [Errno 2] No such file or directory: '../../../etc/wpa_supplicant/wpa_supplicant.conf'
+
+2022-12-13 14:47:38,306-32-werkzeug-INFO-224-127.0.0.1 - - [13/Dec/2022 14:47:38] "[35m[1mGET /network HTTP/1.1[0m" 500 -
+2022-12-13 14:47:38,334-32-werkzeug-INFO-224-127.0.0.1 - - [13/Dec/2022 14:47:38] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2022-12-13 14:47:40,031-32-apiserver.network-ERROR-35-[Errno 2] No such file or directory: '../../../etc/wpa_supplicant/wpa_supplicant.conf'
+2022-12-13 14:47:40,031-32-apiserver.network-ERROR-36-<class 'FileNotFoundError'>
+2022-12-13 14:47:40,032-32-apiserver.network-ERROR-37-Traceback (most recent call last):
+  File "I:\henry\Desktop\Henry\PROALNET\Desarrollo\IoT\APIs\gio API\test\src\apiserver\network.py", line 23, in get
+    wifiFile = open(fileName, "r")
+FileNotFoundError: [Errno 2] No such file or directory: '../../../etc/wpa_supplicant/wpa_supplicant.conf'
+
+2022-12-13 14:47:40,032-32-werkzeug-INFO-224-127.0.0.1 - - [13/Dec/2022 14:47:40] "[35m[1mGET /network HTTP/1.1[0m" 500 -
+2022-12-13 14:47:50,608-32-werkzeug-INFO-224- * Detected change in 'I:\\henry\\Desktop\\Henry\\PROALNET\\Desarrollo\\IoT\\APIs\\gio API\\test\\src\\apiserver\\network.py', reloading
+2022-12-13 14:47:50,623-11884-werkzeug-INFO-224- * Restarting with stat
+2022-12-13 14:47:50,801-1728-root-INFO-39-FlaskServer started
+2022-12-13 14:47:50,802-1728-root-INFO-63-Running FlaskServer
+2022-12-13 14:47:50,802-1728-root-INFO-75-Running MyApp
+2022-12-13 14:47:50,808-1728-werkzeug-WARNING-224- * Debugger is active!
+2022-12-13 14:47:50,812-1728-werkzeug-INFO-224- * Debugger PIN: 119-710-655
+2022-12-13 14:47:52,842-1728-werkzeug-INFO-224- * Detected change in 'I:\\henry\\Desktop\\Henry\\PROALNET\\Desarrollo\\IoT\\APIs\\gio API\\test\\src\\apiserver\\network.py', reloading
+2022-12-13 14:47:52,857-11884-werkzeug-INFO-224- * Restarting with stat
+2022-12-13 14:47:53,036-19380-root-INFO-39-FlaskServer started
+2022-12-13 14:47:53,037-19380-root-INFO-63-Running FlaskServer
+2022-12-13 14:47:53,038-19380-root-INFO-75-Running MyApp
+2022-12-13 14:47:53,043-19380-werkzeug-WARNING-224- * Debugger is active!
+2022-12-13 14:47:53,048-19380-werkzeug-INFO-224- * Debugger PIN: 119-710-655
+2022-12-13 14:47:54,906-19380-apiserver.network-ERROR-35-[Errno 2] No such file or directory: '../../../etc/wpa_supplicant/wpa_supplicant.conf'
+2022-12-13 14:47:54,906-19380-apiserver.network-ERROR-36-<class 'FileNotFoundError'>
+2022-12-13 14:47:54,909-19380-apiserver.network-ERROR-37-Traceback (most recent call last):
+  File "I:\henry\Desktop\Henry\PROALNET\Desarrollo\IoT\APIs\gio API\test\src\apiserver\network.py", line 23, in get
+    wifiFile = open(fileName, "r")
+FileNotFoundError: [Errno 2] No such file or directory: '../../../etc/wpa_supplicant/wpa_supplicant.conf'
+
+2022-12-13 14:47:54,909-19380-werkzeug-INFO-224-127.0.0.1 - - [13/Dec/2022 14:47:54] "[35m[1mGET /network HTTP/1.1[0m" 500 -
+2022-12-13 14:47:56,178-19380-apiserver.network-ERROR-35-[Errno 2] No such file or directory: '../../../etc/wpa_supplicant/wpa_supplicant.conf'
+2022-12-13 14:47:56,178-19380-apiserver.network-ERROR-36-<class 'FileNotFoundError'>
+2022-12-13 14:47:56,179-19380-apiserver.network-ERROR-37-Traceback (most recent call last):
+  File "I:\henry\Desktop\Henry\PROALNET\Desarrollo\IoT\APIs\gio API\test\src\apiserver\network.py", line 23, in get
+    wifiFile = open(fileName, "r")
+FileNotFoundError: [Errno 2] No such file or directory: '../../../etc/wpa_supplicant/wpa_supplicant.conf'
+
+2022-12-13 14:47:56,182-19380-werkzeug-INFO-224-127.0.0.1 - - [13/Dec/2022 14:47:56] "[35m[1mGET /network HTTP/1.1[0m" 500 -
+2022-12-13 14:48:19,257-19380-werkzeug-INFO-224- * Detected change in 'I:\\henry\\Desktop\\Henry\\PROALNET\\Desarrollo\\IoT\\APIs\\gio API\\test\\src\\apiserver\\network.py', reloading
+2022-12-13 14:48:29,385-11884-werkzeug-INFO-224- * Restarting with stat
+2022-12-13 14:48:29,573-12424-root-INFO-39-FlaskServer started
+2022-12-13 14:48:29,575-12424-root-INFO-63-Running FlaskServer
+2022-12-13 14:48:29,575-12424-root-INFO-75-Running MyApp
+2022-12-13 14:48:29,581-12424-werkzeug-WARNING-224- * Debugger is active!
+2022-12-13 14:48:29,585-12424-werkzeug-INFO-224- * Debugger PIN: 119-710-655
+2022-12-13 14:48:34,983-12424-apiserver.network-ERROR-35-[Errno 2] No such file or directory: '../../../etc/wpa_supplicant/wpa_supplicant.conf'
+2022-12-13 14:51:33,007-12424-werkzeug-INFO-224- * Detected change in 'I:\\henry\\Desktop\\Henry\\PROALNET\\Desarrollo\\IoT\\APIs\\gio API\\test\\src\\apiserver\\network.py', reloading
+2022-12-13 14:59:59,197-12424-apiserver.network-ERROR-36-<class 'FileNotFoundError'>
+2022-12-13 14:59:59,213-11884-werkzeug-INFO-224- * Restarting with stat
+2022-12-13 14:59:59,399-5364-root-INFO-39-FlaskServer started
+2022-12-13 14:59:59,401-5364-root-INFO-63-Running FlaskServer
+2022-12-13 14:59:59,401-5364-root-INFO-75-Running MyApp
+2022-12-13 14:59:59,407-5364-werkzeug-WARNING-224- * Debugger is active!
+2022-12-13 14:59:59,412-5364-werkzeug-INFO-224- * Debugger PIN: 119-710-655
