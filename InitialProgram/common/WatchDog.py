@@ -27,9 +27,12 @@ class ConnectionWatchDog():
         self.stoppedFlag = threading.Event()
         # [0]: no connection to router # [1]: no connection to OpttimeServer
         self.__hasConnectionErrorFlags = [False, False]
+        self.__hasErrors = False
         self.__isAlive = False
         self.__thread = None
 
+    def getErrorStatus(self):
+        return self.__hasErrors
     def getError(self):
         return self.__hasConnectionErrorFlags
 
@@ -92,7 +95,7 @@ class ConnectionWatchDog():
             command = ['ping', param, '1', self.__URL_TARGET]
             commandResult = subprocess.call(command,
                                             stdout=subprocess.DEVNULL,
-                                            stderr=subprocess.STDOUT) == 0 ## if the command result is equal to 0 has connection
+                                            stderr=subprocess.STDOUT) == 0  # if the command result is equal to 0 has connection
             self.__hasConnectionErrorFlags[1] = not commandResult
             return commandResult
         except:
@@ -109,6 +112,7 @@ class ConnectionWatchDog():
         os.system("sudo systemctl daemon-reload")
 
     def __doWork(self):
+        self.__hasErrors = False
         logger.info("Start Checkers to verify the connection.")
         # if self.__haveInternetByHTTP():
         #     logger.info("Internet working. HTTP check OK")
@@ -117,6 +121,7 @@ class ConnectionWatchDog():
         if self.__isServerConnectedByPING():  # we check if we have connection with the Opttime Server doing ping
             logger.info("Internet is working. PING check OK")
         else:
+            self.__hasErrors = True
             logger.warn("Internet is not working. Ping no response.")
             if True not in self.isRouterConected():
                 logger.warn("Connection with the router is not Working.")
@@ -145,12 +150,12 @@ class ConnectionWatchDog():
                        '-I', Interface["interface"]]
             commandResult = subprocess.call(command,
                                             stdout=subprocess.DEVNULL,
-                                            stderr=subprocess.STDOUT) == 0 ## if the command result is equal to 0 has connection
+                                            stderr=subprocess.STDOUT) == 0  # if the command result is equal to 0 has connection
             result.append({
                 "interface": Interface["interface"], "response": commandResult
             })
             tempResult |= commandResult
-        logger.info(tempResult)    
+        logger.info(tempResult)
         self.__hasConnectionErrorFlags[0] = not tempResult
         return result
 
