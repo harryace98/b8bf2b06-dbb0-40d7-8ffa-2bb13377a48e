@@ -55,9 +55,12 @@ class RunMode:
             # __LED_UNDEFINED_2 = LedControl.Led(
             #     self.__UNDEFINED_2, "__LED_UNDEFINED_2")
             __LED_OPERATION_MODE.on()
-            __LED_ETHERNET_STATUS.blink(time_off=0.1667, time_on=0.1667)
-            __LED_WIFI_STATUS.blink(time_off=0.1667, time_on=0.1667)
-            __LED_SERVER_STATUS.blink(time_off=0.1667, time_on=0.1667)
+            time.sleep(0.5)
+            __LED_ETHERNET_STATUS.on(time_off=0.1667, time_on=0.1667)
+            time.sleep(0.5)
+            __LED_WIFI_STATUS.on(time_off=0.1667, time_on=0.1667)
+            time.sleep(0.5)
+            __LED_SERVER_STATUS.on(time_off=0.1667, time_on=0.1667)
 
             logging.info("Start run mode. ")
             count = 1

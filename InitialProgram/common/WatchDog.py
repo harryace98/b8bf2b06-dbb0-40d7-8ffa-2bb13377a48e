@@ -182,7 +182,8 @@ class ConnectionWatchDog():
             else:
                 self.__isEthernetConnected = False
                 self.__isWifiConnected = False
-            result |= commandResult
+            if commandResult:
+                result = True 
         logger.info(temp)
         return result
 
