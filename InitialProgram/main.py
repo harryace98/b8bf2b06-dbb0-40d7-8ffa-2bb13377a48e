@@ -17,10 +17,10 @@ PIN_PULSE_3 = 23
 PIN_PULSE_4 = 24
 PIN_OPERATION_MODE = 16
 PIN_CATURE_APP = 20
-PIN_WIFI_STATUS = 21
-PIN_SERVER_STATUS = 26
-PIN_UNDEFINED_1 = 19
-PIN_UNDEFINED_2 = 13
+PIN_ETHERNET_STATUS = 21
+PIN_WIFI_STATUS = 26
+PIN_SERVER_STATUS = 19
+PIN_UNDEFINED_1 = 13
 PIN_SWITCH_MODE = 17
 DEBUG = False
 
@@ -67,15 +67,15 @@ def StartApp():
             return OperationModes.ConfigurationMode(pin_PULSE_1=PIN_PULSE_1, pin_PULSE_2=PIN_PULSE_2,
                                           pin_PULSE_3=PIN_PULSE_3, pin_PULSE_4=PIN_PULSE_4,
                                           pin_OPERATION_MODE=PIN_OPERATION_MODE, pin_CATURE_APP=PIN_CATURE_APP,
-                                          pin_WIFI_STATUS=PIN_WIFI_STATUS, pin_SERVER_STATUS=PIN_SERVER_STATUS,
-                                          pin_UNDEFINED_1=PIN_UNDEFINED_1, pin_UNDEFINED_2=PIN_UNDEFINED_2, 
+                                          pin_ETHERNET_STATUS=PIN_ETHERNET_STATUS, pin_WIFI_STATUS=PIN_WIFI_STATUS,
+                                          pin_SERVER_STATUS=PIN_SERVER_STATUS, pin_UNDEFINED_2=PIN_UNDEFINED_1,
                                           debug=DEBUG)
         else:
             return OperationModes.RunMode(pin_PULSE_1=PIN_PULSE_1, pin_PULSE_2=PIN_PULSE_2,
                                           pin_PULSE_3=PIN_PULSE_3, pin_PULSE_4=PIN_PULSE_4,
                                           pin_OPERATION_MODE=PIN_OPERATION_MODE, pin_CATURE_APP=PIN_CATURE_APP,
-                                          pin_WIFI_STATUS=PIN_WIFI_STATUS, pin_SERVER_STATUS=PIN_SERVER_STATUS,
-                                          pin_UNDEFINED_1=PIN_UNDEFINED_1, pin_UNDEFINED_2=PIN_UNDEFINED_2, 
+                                          pin_ETHERNET_STATUS=PIN_ETHERNET_STATUS, pin_WIFI_STATUS=PIN_WIFI_STATUS,
+                                          pin_SERVER_STATUS=PIN_SERVER_STATUS, pin_UNDEFINED_2=PIN_UNDEFINED_1, timeToRestart=settings.TIMETORESTART,
                                           debug=DEBUG)
 
     except Exception as e:

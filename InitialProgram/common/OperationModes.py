@@ -19,18 +19,19 @@ logger = logging.getLogger(__name__)
 
 class RunMode:
     def __init__(self, pin_PULSE_1: int, pin_PULSE_2, pin_PULSE_3, pin_PULSE_4, pin_OPERATION_MODE, pin_CATURE_APP,
-                 pin_WIFI_STATUS, pin_SERVER_STATUS, pin_UNDEFINED_1, pin_UNDEFINED_2, debug) -> None:
+                 pin_ETHERNET_STATUS, pin_WIFI_STATUS, pin_SERVER_STATUS, pin_UNDEFINED_2,timeToRestart, debug=False) -> None:
         self.__PULSE_1 = pin_PULSE_1
         self.__PULSE_2 = pin_PULSE_2
         self.__PULSE_3 = pin_PULSE_3
         self.__PULSE_4 = pin_PULSE_4
         self.__OPERATION_MODE = pin_OPERATION_MODE
         self.__CATURE_APP = pin_CATURE_APP
+        self.__ETHERNET_STATUS = pin_ETHERNET_STATUS
         self.__WIFI_STATUS = pin_WIFI_STATUS
         self.__SERVER_STATUS = pin_SERVER_STATUS
-        self.__UNDEFINED_1 = pin_UNDEFINED_1
         self.__UNDEFINED_2 = pin_UNDEFINED_2
-        self.__DEBUG = debug
+        self.__DEBUG = debug 
+        self.__TIMETORESTART =  300 if debug else timeToRestart
         self.__CurrentDir = os.getcwd()
     """
     It's a function that runs a thread that checks the internet connection and blinks the LED's
@@ -45,17 +46,19 @@ class RunMode:
                 self.__OPERATION_MODE, "__LED_OPERATION_MODE")
             # __LED_CATURE_APP = LedControl.Led(
             #     self.__CATURE_APP, "__LED_CATURE_APP")
+            __LED_ETHERNET_STATUS = LedControl.Led(
+                self.__ETHERNET_STATUS, "__LED_ETHERNET_STATUS")
             __LED_WIFI_STATUS = LedControl.Led(
                 self.__WIFI_STATUS, "__LED_WIFI_STATUS")
             __LED_SERVER_STATUS = LedControl.Led(
-                self.__SERVER_STATUS, "__LED_SERVER_STATUS")
-            # __LED_UNDEFINED_1 = LedControl.Led(
-            #     self.__UNDEFINED_1, "__LED_UNDEFINED_1")
+                 self.__SERVER_STATUS, "__LED_SERVER_STATUS")
             # __LED_UNDEFINED_2 = LedControl.Led(
             #     self.__UNDEFINED_2, "__LED_UNDEFINED_2")
             __LED_OPERATION_MODE.on()
+            __LED_ETHERNET_STATUS.blink(time_off=0.1667, time_on=0.1667)
             __LED_WIFI_STATUS.blink(time_off=0.1667, time_on=0.1667)
             __LED_SERVER_STATUS.blink(time_off=0.1667, time_on=0.1667)
+
             logging.info("Start run mode. ")
             count = 1
             if not self.__DEBUG:
@@ -78,34 +81,31 @@ class RunMode:
 
             # Checking the systems
             watchDog = WatchDog.ConnectionWatchDog(restartFileName=settings.RESTART_FILE_NAME, restartDateFormat=settings.RESTART_DATE_FORMAT,
-                                                   urlTarget=settings.URL_TARGET, interfaceTarget=settings.INTERFACE_TARGET, timeToExec=settings.TIMETOEXEC)
+                                                   urlTarget=settings.URL_TARGET, interfaceTarget=settings.INTERFACE_TARGET, timeToExec=settings.TIMETOEXEC, timeToRestart=self.__TIMETORESTART)
             watchDog.start()
 
             while watchDog.isAlive():
                 logger.info("Internet watchDog is Running.")
                 time.sleep(15)
-                connectionErrors = watchDog.getError()
-                logger.info(connectionErrors)
-                if connectionErrors[0]:  # router connection status
+                logger.info(watchDog.getConnectionsStatus)
+                if not watchDog.getEthernetStatus():  # router connection status via ethernet
+                    __LED_ETHERNET_STATUS.blink(time_off=0.1667, time_on=0.1667)
+                else:
+                    __LED_ETHERNET_STATUS.stopBlink()
+                    __LED_ETHERNET_STATUS.on()
+
+                if not watchDog.getWifiStatus():  # router connection status via wifi
                     __LED_WIFI_STATUS.blink(time_off=0.1667, time_on=0.1667)
                 else:
                     __LED_WIFI_STATUS.stopBlink()
                     __LED_WIFI_STATUS.on()
-                if connectionErrors[1]:  # server connection Status
+
+                if not watchDog.getOpttimeServerStatus():  # server connection Status
                     __LED_SERVER_STATUS.blink(time_off=0.1667, time_on=0.1667)
                 else:
                     __LED_SERVER_STATUS.stopBlink()
                     __LED_SERVER_STATUS.on()
-                if not watchDog.getErrorStatus() and count <= 3:
-                    logger.info(
-                        "watchDog.__hasErrors Flag no indicate error. Server connection is OK.")
-                    __LED_WIFI_STATUS.stopBlink()
-                    __LED_WIFI_STATUS.on()
-                    __LED_SERVER_STATUS.stopBlink()
-                    __LED_SERVER_STATUS.on()
-                    count = 0
-                time.sleep(45)
-                count += 1
+                time.sleep(15)
             else:
                 logger.info("Internet watchDog stopped.")
 
@@ -120,41 +120,48 @@ class RunMode:
 
 class ConfigurationMode:
     def __init__(self, pin_PULSE_1, pin_PULSE_2, pin_PULSE_3, pin_PULSE_4, pin_OPERATION_MODE, pin_CATURE_APP,
-                 pin_WIFI_STATUS, pin_SERVER_STATUS, pin_UNDEFINED_1, pin_UNDEFINED_2, debug) -> None:
+                 pin_ETHERNET_STATUS, pin_WIFI_STATUS, pin_SERVER_STATUS, pin_UNDEFINED_2, debug) -> None:
         self.__PULSE_1 = pin_PULSE_1
         self.__PULSE_2 = pin_PULSE_2
         self.__PULSE_3 = pin_PULSE_3
         self.__PULSE_4 = pin_PULSE_4
         self.__OPERATION_MODE = pin_OPERATION_MODE
         self.__CATURE_APP = pin_CATURE_APP
+        self.__ETHERNET_STATUS = pin_ETHERNET_STATUS
         self.__WIFI_STATUS = pin_WIFI_STATUS
         self.__SERVER_STATUS = pin_SERVER_STATUS
-        self.__UNDEFINED_1 = pin_UNDEFINED_1
         self.__UNDEFINED_2 = pin_UNDEFINED_2
         self.__DEBUG = debug
         self.__CurrentDir = os.getcwd()
 
     def run(self):
         try:
-            __LED_OPERATION_MODE = LedControl.Led(
-                self.__OPERATION_MODE, "__LED_OPERATION_MODE")
-            __LED_CATURE_APP = LedControl.Led(
-                self.__CATURE_APP, "__LED_CATURE_APP")
-            __LED_WIFI_STATUS = LedControl.Led(
-                self.__WIFI_STATUS, "__LED_WIFI_STATUS")
-            __LED_SERVER_STATUS = LedControl.Led(
-                self.__SERVER_STATUS, "__LED_SERVER_STATUS")
-            __LED_UNDEFINED_1 = LedControl.Led(
-                self.__UNDEFINED_1, "__LED_UNDEFINED_1")
-            __LED_UNDEFINED_2 = LedControl.Led(
-                self.__UNDEFINED_2, "__LED_UNDEFINED_2")
+            # __LED_OPERATION_MODE = LedControl.Led(
+            #     self.__OPERATION_MODE, "__LED_OPERATION_MODE")
+            # __LED_CATURE_APP = LedControl.Led(
+            #     self.__CATURE_APP, "__LED_CATURE_APP")
+            # __LED_WIFI_STATUS = LedControl.Led(
+            #     self.__ETHERNET_STATUS, "__LED_WIFI_STATUS")
+            # __LED_SERVER_STATUS = LedControl.Led(
+            #     self.__WIFI_STATUS, "__LED_SERVER_STATUS")
+            # __LED_SERVER_STATUS = LedControl.Led(
+            #     self.__SERVER_STATUS, "__LED_SERVER_STATUS")
+            # __LED_UNDEFINED_2 = LedControl.Led(
+            #     self.__UNDEFINED_2, "__LED_UNDEFINED_2")
 
-            __LED_OPERATION_MODE.blink(time_off=0.1667, time_on=0.1667)
-            __LED_CATURE_APP.blink(time_off=0.1667, time_on=0.1667)
-            __LED_WIFI_STATUS.blink(time_off=0.1667, time_on=0.1667)
-            __LED_SERVER_STATUS.blink(time_off=0.1667, time_on=0.1667)
-            __LED_UNDEFINED_1.blink(time_off=0.1667, time_on=0.1667)
-            __LED_UNDEFINED_2.blink(time_off=0.1667, time_on=0.1667)
+            # __LED_OPERATION_MODE.blink(time_off=0.1667, time_on=0.1667)
+            # __LED_CATURE_APP.blink(time_off=0.1667, time_on=0.1667)
+            # __LED_WIFI_STATUS.blink(time_off=0.1667, time_on=0.1667)
+            # __LED_SERVER_STATUS.blink(time_off=0.1667, time_on=0.1667)
+            # __LED_SERVER_STATUS.blink(time_off=0.1667, time_on=0.1667)
+            # __LED_UNDEFINED_2.blink(time_off=0.1667, time_on=0.1667)
+
+            GPIO.setup(self.__OPERATION_MODE, GPIO.OUT)
+            GPIO.setup(self.__CATURE_APP, GPIO.OUT)
+            GPIO.setup(self.__ETHERNET_STATUS, GPIO.OUT)
+            GPIO.setup(self.__WIFI_STATUS, GPIO.OUT)
+            GPIO.setup(self.__SERVER_STATUS, GPIO.OUT)
+            GPIO.setup(self.__UNDEFINED_2, GPIO.OUT)
 
             # update ap config
             self._SetWifiNamePassword()
@@ -174,9 +181,22 @@ class ConfigurationMode:
                     logger.error("Error command.")
                     logger.error(e)
                     logger.error(traceback.format_exc())
+            logging.info("Configuration Mode are enable.")
             while (True):
-                logging.info("Configuration Mode are enable.")
-                time.sleep(7200)
+                GPIO.output(self.__OPERATION_MODE, GPIO.HIGH)
+                GPIO.output(self.__CATURE_APP, GPIO.HIGH)
+                GPIO.output(self.__ETHERNET_STATUS, GPIO.HIGH)
+                GPIO.output(self.__WIFI_STATUS, GPIO.HIGH)
+                GPIO.output(self.__SERVER_STATUS, GPIO.HIGH)
+                GPIO.output(self.__UNDEFINED_2, GPIO.HIGH)
+                time.sleep(0.1667)
+                GPIO.output(self.__OPERATION_MODE, GPIO.LOW)
+                GPIO.output(self.__CATURE_APP, GPIO.LOW)
+                GPIO.output(self.__ETHERNET_STATUS, GPIO.LOW)
+                GPIO.output(self.__WIFI_STATUS, GPIO.LOW)
+                GPIO.output(self.__SERVER_STATUS, GPIO.LOW)
+                GPIO.output(self.__UNDEFINED_2, GPIO.LOW)
+                time.sleep(0.1667)
         except Exception as e:
             logger.error("Error During Configuration mode.")
             logger.error(e)

@@ -28,4 +28,5 @@ RESTART_FILE_NAME = 'restarts.csv'
 RESTART_DATE_FORMAT = '%d/%m/%Y %H:%M:%S'
 URL_TARGET = "a39g730csmjomc-ats.iot.us-east-1.amazonaws.com"
 INTERFACE_TARGET = "eth0"
-TIMETOEXEC = 900
+TIMETOEXEC = 30
+TIMETORESTART = 300

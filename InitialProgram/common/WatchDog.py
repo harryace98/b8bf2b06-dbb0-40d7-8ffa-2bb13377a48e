@@ -18,24 +18,39 @@ logger = logging.getLogger(__name__)
 
 class ConnectionWatchDog():
     def __init__(self, restartFileName="restarts.csv", restartDateFormat="%d/%m/%Y %H:%M:%S",
-                 urlTarget="a39g730csmjomc-ats.iot.us-east-1.amazonaws.com", interfaceTarget="eth0", timeToExec=1800) -> None:
+                 urlTarget="a39g730csmjomc-ats.iot.us-east-1.amazonaws.com", interfaceTarget="eth0", timeToExec=1800, timeToRestart=28800) -> None:
         self.__RESTART_FILE_NAME = restartFileName
         self.__RESTART_DATE_FORMAT = restartDateFormat
         self.__URL_TARGET = urlTarget
         self.__INTERFACE_TARGET = interfaceTarget
         self.__TIMETOEXEC = timeToExec
+        self.__TIMETORESTART = timeToRestart
         self.stoppedFlag = threading.Event()
-        # [0]: no connection to router # [1]: no connection to OpttimeServer
-        self.__hasConnectionErrorFlags = [False, False]
-        self.__hasErrors = False
+        # [0]: no connection to router via wifi # [1]: no connection to router via Ethernet
+        # [2]: no connection to OpttimeServer # 
+        #self.__hasConnectionErrorFlags = [False, False, False]
+        self.__isWifiConnected = False
+        self.__isEthernetConnected = False
+        self.__isOpttimeServerConnected = False
+        self.__hasConnection = False
         self.__isAlive = False
         self.__thread = None
+        self.__firstLoopFlag = True
 
-    def getErrorStatus(self):
-        return self.__hasErrors
-    def getError(self):
-        return self.__hasConnectionErrorFlags
+    def getStatus(self):
+        return self.__hasConnection
+        
+    def getWifiStatus(self):
+        return self.__isWifiConnected
 
+    def getEthernetStatus(self):
+        return self.__isEthernetConnected
+
+    def getOpttimeServerStatus(self):
+        return self.__isOpttimeServerConnected
+        
+    def getConnectionsStatus(self):
+        return [self.__isEthernetConnected, self.__isWifiConnected, self.__isOpttimeServerConnected]
     def isAlive(self):
         self.__isAlive = self.__thread.is_alive()
         return self.__isAlive
@@ -75,17 +90,17 @@ class ConnectionWatchDog():
             f.write("\n" + datetime.now().strftime(self.__RESTART_DATE_FORMAT))
             f.close()
 
-    def __haveInternetByHTTP(self):
-        return False
-        # conn = httplib.HTTPConnection(self.__URL_TARGET, timeout=5)
-        # try:
-        #     conn.request("HEAD", "/")
-        #     conn.close()
-        #     return True
-        # except:
-        #     conn.close()
-        #     logger.error("HTTP Connection Failed")
-        #     return False
+    # def __haveInternetByHTTP(self):
+    #     return False
+    #     # conn = httplib.HTTPConnection(self.__URL_TARGET, timeout=5)
+    #     # try:
+    #     #     conn.request("HEAD", "/")
+    #     #     conn.close()
+    #     #     return True
+    #     # except:
+    #     #     conn.close()
+    #     #     logger.error("HTTP Connection Failed")
+    #     #     return False
 
     def __isServerConnectedByPING(self):
         try:
@@ -96,7 +111,7 @@ class ConnectionWatchDog():
             commandResult = subprocess.call(command,
                                             stdout=subprocess.DEVNULL,
                                             stderr=subprocess.STDOUT) == 0  # if the command result is equal to 0 has connection
-            self.__hasConnectionErrorFlags[1] = not commandResult
+            self.__isOpttimeServerConnected = commandResult
             return commandResult
         except:
             return False
@@ -110,38 +125,44 @@ class ConnectionWatchDog():
         os.system("sudo service networking restart")
         time.sleep(3)
         os.system("sudo systemctl daemon-reload")
+    def __RestartDevice(self):
+        os.system("sudo reboot now")
 
     def __doWork(self):
-        self.__hasErrors = False
+        if self.__firstLoopFlag:
+            self.__putRestartTimespan()
+            self.__hasConnection = True
+            self.__firstLoopFlag = False
+        
         logger.info("Start Checkers to verify the connection.")
         # if self.__haveInternetByHTTP():
         #     logger.info("Internet working. HTTP check OK")
         # else:
-        self.isRouterConected()
         if self.__isServerConnectedByPING():  # we check if we have connection with the Opttime Server doing ping
             logger.info("Internet is working. PING check OK")
+            self.__hasConnection = True
         else:
-            self.__hasErrors = True
+            self.__hasConnection = False
             logger.warn("Internet is not working. Ping no response.")
-            if True not in self.isRouterConected():
-                logger.warn("Connection with the router is not Working.")
-                lastRestart = self.__getLastRestart()
-                lastRestartFromNow = (datetime.now() - lastRestart)
-                if lastRestartFromNow.total_seconds() < 60*60:
-                    logger.info(
-                        "Interfaces has already been restarted within the last 60 min, skipping")
-                else:
-                    logger.info(
-                        "Internet still not working, restarting device")
-                    self.__putRestartTimespan()
-                    self.__RestartInterface()
-                    logger.info("Restarted")
+
+        if self.isRouterConected():
+            self.__hasConnection = False
+            logger.warn("Connection with the router is not Working.")
+
+        lastRestartFromNow = (datetime.now() - self.__getLastRestart())
+        if lastRestartFromNow.total_seconds() > self.__TIMETORESTART:
+            logger.info("The Device will be Restarted")
+            self.__RestartDevice()
+        if self.__hasConnection:
+            self.__putRestartTimespan()
 
     def isRouterConected(self):
         gateway = self.getDefaultGateway()
         logger.info(gateway)
-        result = []
-        tempResult = False
+        result = False
+        temp = []
+        self.__isEthernetConnected = False
+        self.__isWifiConnected = False
         for Interface in gateway:
             # Option for the number of packets as a function of
             param = '-n' if platform.system().lower() == 'windows' else '-c'
@@ -151,12 +172,18 @@ class ConnectionWatchDog():
             commandResult = subprocess.call(command,
                                             stdout=subprocess.DEVNULL,
                                             stderr=subprocess.STDOUT) == 0  # if the command result is equal to 0 has connection
-            result.append({
+            temp.append({
                 "interface": Interface["interface"], "response": commandResult
             })
-            tempResult |= commandResult
-        logger.info(tempResult)
-        self.__hasConnectionErrorFlags[0] = not tempResult
+            if Interface["interface"] == "eth0":
+                self.__isEthernetConnected = commandResult
+            elif Interface["interface"] == "wlan0":
+                self.__isWifiConnected = commandResult
+            else:
+                self.__isEthernetConnected = False
+                self.__isWifiConnected = False
+            result |= commandResult
+        logger.info(temp)
         return result
 
     def __run(self, stopFlag, timeToWait):
