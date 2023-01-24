@@ -65,8 +65,9 @@ class Led(object):
     def stopBlink(self):
         # set the semaphore so the thread will exit after sleep has completed
         self.pin_stop.set()
-        # wait for the thread to exit
-        self.__thread.join()
+        if hasattr(self, 'attr_name'):
+            # wait for the thread to exit
+            self.__thread.join()
     def reset(self):
         # set the semaphore so the thread will exit after sleep has completed
         self.pin_stop.set()

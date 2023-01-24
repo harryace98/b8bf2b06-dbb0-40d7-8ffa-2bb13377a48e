@@ -56,11 +56,11 @@ class RunMode:
             #     self.__UNDEFINED_2, "__LED_UNDEFINED_2")
             __LED_OPERATION_MODE.on()
             time.sleep(0.5)
-            __LED_ETHERNET_STATUS.on(time_off=0.1667, time_on=0.1667)
+            __LED_ETHERNET_STATUS.on()
             time.sleep(0.5)
-            __LED_WIFI_STATUS.on(time_off=0.1667, time_on=0.1667)
+            __LED_WIFI_STATUS.on()
             time.sleep(0.5)
-            __LED_SERVER_STATUS.on(time_off=0.1667, time_on=0.1667)
+            __LED_SERVER_STATUS.on()
 
             logging.info("Start run mode. ")
             count = 1
@@ -68,7 +68,7 @@ class RunMode:
                 try:
                     # Change the files to start the run mode
                     command = ['sudo', 'bash',
-                               '/home/pi/Configurations/normal.sh']
+                               '/home/opttime/Configurations/normal.sh']
                     commandResult = subprocess.call(command,
                                                     stdout=subprocess.DEVNULL,
                                                     stderr=subprocess.STDOUT
@@ -90,7 +90,6 @@ class RunMode:
             while watchDog.isAlive():
                 logger.info("Internet watchDog is Running.")
                 time.sleep(15)
-                logger.info(watchDog.getConnectionsStatus)
                 if not watchDog.getEthernetStatus():  # router connection status via ethernet
                     __LED_ETHERNET_STATUS.blink(time_off=0.1667, time_on=0.1667)
                 else:
@@ -113,7 +112,7 @@ class RunMode:
                 logger.info("Internet watchDog stopped.")
 
                 # GPIO.output(27,0)
-                # os.system("sudo bash /home/pi/Configurations/normal.sh")
+                # os.system("sudo bash /home/opttime/Configurations/normal.sh")
             logger.warn("Proccess stopped unexpected.")
         except Exception as e:
             logger.error(e)
@@ -172,7 +171,7 @@ class ConfigurationMode:
             if not self.__DEBUG:
                 try:
                     command = ['sudo', 'bash',
-                               '/home/pi/Configurations/AP.sh']
+                               '/home/opttime/Configurations/AP.sh']
                     commandResult = subprocess.run(command,
                                                    stdout=subprocess.DEVNULL,
                                                    stderr=subprocess.STDOUT
@@ -227,5 +226,5 @@ class ConfigurationMode:
         logger.info(config_lines)
         config = '\n'.join(config_lines)
         # writing to file
-        with open("/home/pi/Configurations/AP/hostapd.conf", "w") as wifi:
+        with open("/home/opttime/Configurations/AP/hostapd.conf", "w") as wifi:
             wifi.write(config)

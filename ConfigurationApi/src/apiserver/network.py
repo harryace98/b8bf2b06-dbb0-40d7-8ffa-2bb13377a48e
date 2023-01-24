@@ -56,7 +56,7 @@ class NetworkAPI(Resource):
                 resp["message"] = errMsg
                 status = 400
 
-            fileName = "/home/pi/API/wifilist.txt"
+            fileName = "/home/opttime/API/wifilist.txt"
             fileObj = Path(fileName)
             
             wifi = self.BuildWifiConfig(

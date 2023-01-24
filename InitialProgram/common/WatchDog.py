@@ -86,7 +86,7 @@ class ConnectionWatchDog():
                 pass
 
     def __putRestartTimespan(self):
-        with open(self.__RESTART_FILE_NAME, 'a') as f:
+        with open(self.__RESTART_FILE_NAME, 'w') as f:
             f.write("\n" + datetime.now().strftime(self.__RESTART_DATE_FORMAT))
             f.close()
 
@@ -146,15 +146,20 @@ class ConnectionWatchDog():
             logger.warn("Internet is not working. Ping no response.")
 
         if self.isRouterConected():
+            self.__hasConnection = True
+            logger.info("Connection with the router is Working correctly.")
+        else:
             self.__hasConnection = False
             logger.warn("Connection with the router is not Working.")
 
-        lastRestartFromNow = (datetime.now() - self.__getLastRestart())
-        if lastRestartFromNow.total_seconds() > self.__TIMETORESTART:
-            logger.info("The Device will be Restarted")
-            self.__RestartDevice()
         if self.__hasConnection:
             self.__putRestartTimespan()
+
+        lastRestartFromNow = (datetime.now() - self.__getLastRestart())
+        if lastRestartFromNow.total_seconds() > self.__TIMETORESTART and (not self.__hasConnection):
+            logger.warn("The Device will be Restarted")
+            time.sleep(1)
+            self.__RestartDevice()
 
     def isRouterConected(self):
         gateway = self.getDefaultGateway()
@@ -188,7 +193,7 @@ class ConnectionWatchDog():
         return result
 
     def __run(self, stopFlag, timeToWait):
-        logger.info("start the wifi wd." + str(stopFlag.is_set()))
+        logger.info("start the wifi wd. ")
         while not stopFlag.is_set():
             try:
                 logger.info("Starting Internet watchdog Proccess...")
